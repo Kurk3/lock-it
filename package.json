@@ -1,0 +1,53 @@
+{
+  "name": "lock-it",
+  "version": "1.0.0",
+  "description": "Lock It — Focus & Productivity Menu Bar App",
+  "author": "Adam",
+  "main": "electron/main.js",
+  "private": true,
+  "scripts": {
+    "dev:vue": "vite",
+    "build:vue": "vite build",
+    "dev": "concurrently \"npm run dev:vue\" \"sleep 3 && electron .\"",
+    "start": "electron .",
+    "build:mac": "npm run build:vue && electron-builder --mac",
+    "build:dmg": "npm run build:vue && electron-builder --mac dmg"
+  },
+  "dependencies": {
+    "vue": "^3.4.0",
+    "pinia": "^2.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.0",
+    "vite": "^5.4.0",
+    "electron": "^32.2.0",
+    "electron-builder": "24.13.3",
+    "concurrently": "^9.0.0"
+  },
+  "build": {
+    "appId": "com.lockit.app",
+    "productName": "Lock It",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "electron/**/*",
+      "dist-vue/**/*",
+      "build/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "icon": "build/icon.icns",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["universal"]
+        }
+      ]
+    },
+    "dmg": {
+      "title": "Lock It",
+      "backgroundColor": "#0a0a0a"
+    }
+  }
+}
