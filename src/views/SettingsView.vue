@@ -1,7 +1,9 @@
 <script setup>
 import { ref, watch } from "vue";
-import { useLockStore } from "../stores/lockStore";
-const store = useLockStore();
+import { useSettingsStore } from "../stores/settingsStore";
+import * as SettingsRepo from "../services/SettingsRepository";
+
+const settings = useSettingsStore();
 
 const newAppName = ref("");
 const newAppPath = ref("");
@@ -10,23 +12,22 @@ const showAddForm = ref(false);
 
 function addApp() {
   if (!newAppName.value.trim() || !newAppPath.value.trim()) return;
-  store.addApp(newAppName.value.trim(), newAppPath.value.trim(), newAppType.value);
-  newAppName.value = ""; newAppPath.value = ""; newAppType.value = "app"; showAddForm.value = false;
+  settings.addApp(newAppName.value.trim(), newAppPath.value.trim(), newAppType.value);
+  newAppName.value = "";
+  newAppPath.value = "";
+  newAppType.value = "app";
+  showAddForm.value = false;
 }
 
 async function browseApp() {
-  console.log("browseApp called, window.lockIt:", !!window.lockIt);
-  if (!window.lockIt) return;
-  console.log("pickApp exists:", typeof window.lockIt.pickApp);
-  const result = await window.lockIt.pickApp();
-  console.log("pickApp result:", result);
+  const result = await SettingsRepo.pickApp();
   if (result) {
     newAppName.value = result.name;
     newAppPath.value = result.path;
   }
 }
 
-watch(() => store.deepWorkAudioUrl, () => store.saveSettings());
+watch(() => settings.deepWorkAudioUrl, () => settings.save());
 </script>
 
 <template>
@@ -38,8 +39,8 @@ watch(() => store.deepWorkAudioUrl, () => store.saveSettings());
         <span class="section-subtitle">Opened when you lock in</span>
       </div>
       <div class="app-list">
-        <div v-if="store.apps.length === 0" class="empty-state">No apps configured yet</div>
-        <div v-for="(app, i) in store.apps" :key="i" class="app-item">
+        <div v-if="settings.apps.length === 0" class="empty-state">No apps configured yet</div>
+        <div v-for="(app, i) in settings.apps" :key="i" class="app-item">
           <div class="app-icon-box">
             <svg v-if="app.type==='folder'" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
             <svg v-else viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
@@ -48,7 +49,7 @@ watch(() => store.deepWorkAudioUrl, () => store.saveSettings());
             <span class="app-name">{{ app.name }}</span>
             <span class="app-path">{{ app.path }}</span>
           </div>
-          <button class="remove-btn" @click="store.removeApp(i)">
+          <button class="remove-btn" @click="settings.removeApp(i)">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </div>
@@ -81,7 +82,7 @@ watch(() => store.deepWorkAudioUrl, () => store.saveSettings());
         <span class="section-title">Deep Work Audio</span>
         <span class="section-subtitle">Direct MP3 stream URL</span>
       </div>
-      <input v-model="store.deepWorkAudioUrl" type="text" placeholder="https://example.com/ambient.mp3" class="form-input" @blur="store.saveSettings()"/>
+      <input v-model="settings.deepWorkAudioUrl" type="text" placeholder="https://example.com/ambient.mp3" class="form-input" @blur="settings.save()"/>
     </div>
 
     <!-- AUTO LAUNCH -->
@@ -92,7 +93,7 @@ watch(() => store.deepWorkAudioUrl, () => store.saveSettings());
           <span class="section-subtitle">Start Lock It when Mac boots</span>
         </div>
         <label class="toggle">
-          <input type="checkbox" :checked="store.autoLaunch" @change="store.toggleAutoLaunch($event.target.checked)"/>
+          <input type="checkbox" :checked="settings.autoLaunch" @change="settings.toggleAutoLaunch($event.target.checked)"/>
           <span class="toggle-slider"></span>
         </label>
       </div>

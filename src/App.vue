@@ -1,12 +1,19 @@
 <script setup>
-import { onMounted } from "vue";
-import { useLockStore } from "./stores/lockStore";
-import HomePanel from "./components/HomePanel.vue";
-import SettingsPanel from "./components/SettingsPanel.vue";
+import { ref, onMounted } from "vue";
+import { useSettingsStore } from "./stores/settingsStore";
+import HomeView from "./views/HomeView.vue";
+import SettingsView from "./views/SettingsView.vue";
 import NavBar from "./components/NavBar.vue";
 
-const store = useLockStore();
-onMounted(() => store.loadSettings());
+const settings = useSettingsStore();
+const isDark = ref(true);
+
+function toggleTheme() {
+  isDark.value = !isDark.value;
+  document.documentElement.setAttribute("data-theme", isDark.value ? "dark" : "light");
+}
+
+onMounted(() => settings.load());
 </script>
 
 <template>
@@ -16,17 +23,31 @@ onMounted(() => store.loadSettings());
       <div class="app-content">
         <div class="header">
           <div class="logo-area">
-            <svg class="logo-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-              <circle cx="12" cy="16" r="1.5" />
+            <svg class="logo-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
             </svg>
             <span class="logo-text">LOCK IT</span>
           </div>
-          <div class="mode-badge" :class="store.mode">{{ store.modeLabel }}</div>
+          <div class="header-actions">
+            <!-- Theme Switcher -->
+            <button class="header-btn" @click="toggleTheme">
+              <svg v-if="isDark" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+              </svg>
+              <svg v-else viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+              </svg>
+            </button>
+            <!-- Close -->
+            <button class="header-btn close-btn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
         </div>
-        <HomePanel v-if="store.currentTab === 'home'" />
-        <SettingsPanel v-else-if="store.currentTab === 'settings'" />
+        <HomeView v-if="settings.currentTab === 'home'" />
+        <SettingsView v-else-if="settings.currentTab === 'settings'" />
         <NavBar />
       </div>
     </div>
@@ -34,17 +55,32 @@ onMounted(() => store.loadSettings());
 </template>
 
 <style>
-:root {
-  --bg-primary: #0a0a0a;
-  --bg-secondary: #141414;
-  --bg-tertiary: #1a1a1a;
-  --bg-hover: #222222;
-  --text-primary: #ffffff;
-  --text-secondary: #888888;
-  --text-muted: #555555;
-  --border: #2a2a2a;
-  --accent: #ffffff;
-  --danger: #ff4444;
+:root,
+[data-theme="dark"] {
+  --bg-primary: #0e0e0e;
+  --bg-secondary: #1c1c1c;
+  --bg-tertiary: #282828;
+  --bg-hover: #303030;
+  --text-primary: #ececec;
+  --text-secondary: #c0c0c0;
+  --text-muted: #909090;
+  --border: #262626;
+  --border-light: #383838;
+  --accent: #ececec;
+  --danger: #e84040;
+}
+[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f5;
+  --bg-tertiary: #ebebeb;
+  --bg-hover: #e0e0e0;
+  --text-primary: #1a1a1a;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --border: #e0e0e0;
+  --border-light: #cccccc;
+  --accent: #1a1a1a;
+  --danger: #dc3545;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { background: transparent; -webkit-font-smoothing: antialiased; }
@@ -88,12 +124,13 @@ body { background: transparent; -webkit-font-smoothing: antialiased; }
 .logo-icon { opacity: 0.9; }
 .logo-text { font-size: 13px; font-weight: 700; letter-spacing: 2px; }
 
-.mode-badge {
-  font-size: 10px; font-weight: 600; letter-spacing: 1.5px;
-  padding: 4px 10px; border-radius: 20px;
-  background: var(--bg-tertiary); color: var(--text-muted);
-  border: 1px solid var(--border); transition: all 0.3s ease;
+.header-actions { display: flex; align-items: center; gap: 2px; }
+.header-btn {
+  width: 32px; height: 32px; border-radius: 6px; border: none;
+  background: transparent; color: var(--text-muted);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.15s;
 }
-.mode-badge.deep { background: rgba(255,255,255,0.1); color: var(--text-primary); border-color: rgba(255,255,255,0.2); }
-.mode-badge.shallow { background: rgba(255,255,255,0.05); color: var(--text-secondary); border-color: rgba(255,255,255,0.1); }
+.header-btn:hover { color: var(--text-secondary); background: var(--bg-secondary); }
+.header-btn.close-btn:hover { color: var(--danger); background: rgba(232,64,64,0.1); }
 </style>
