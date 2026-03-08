@@ -1,48 +1,74 @@
 import { defineStore } from "pinia";
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { useTimerStore } from "./timerStore";
 import { useSettingsStore } from "./settingsStore";
-import * as AudioService from "../services/AudioService";
+import { useStatsStore } from "./statsStore";
 import * as GrayscaleService from "../services/GrayscaleService";
 import * as AppLauncherService from "../services/AppLauncherService";
 
 export const useSessionStore = defineStore("session", () => {
   const mode = ref("idle");
   const isLocked = ref(false);
-
-  const modeLabel = computed(() => {
-    if (mode.value === "deep") return "DEEP WORK";
-    if (mode.value === "shallow") return "SHALLOW WORK";
-    return "READY";
-  });
+  const sessionStartTime = ref(null);
 
   async function lockIn(selectedMode) {
     const timer = useTimerStore();
     const settings = useSettingsStore();
 
+    const profile = settings.modes.find((m) => m.id === selectedMode);
+    if (!profile) return;
+
     mode.value = selectedMode;
     isLocked.value = true;
+    sessionStartTime.value = new Date().toISOString();
+
     timer.start();
     await GrayscaleService.setGrayscale(true);
-    await AppLauncherService.openItems(settings.apps);
 
-    const audioUrl = settings.getAudioUrlForMode(selectedMode);
-    if (audioUrl) await AudioService.play(audioUrl);
+    if (profile.closeOtherApps) {
+      await AppLauncherService.closeOtherApps();
+    }
+
+    if (profile.screens && profile.screens.length > 0) {
+      await AppLauncherService.executeDesktopLayout(profile.screens);
+    }
   }
 
   async function stopSession() {
     const timer = useTimerStore();
+    const settings = useSettingsStore();
+    const stats = useStatsStore();
 
-    const finalTime = timer.display;
+    const durationSeconds = timer.seconds;
+    const profile = settings.modes.find((m) => m.id === mode.value);
+
     timer.stop();
-    AudioService.stop();
-    await GrayscaleService.setGrayscale(false);
+
+    try {
+      await GrayscaleService.setGrayscale(false);
+    } catch (e) {
+      console.warn("Failed to disable grayscale:", e);
+    }
+
+    try {
+      if (sessionStartTime.value && durationSeconds > 0) {
+        await stats.addSession({
+          id: "sess_" + Date.now(),
+          modeId: mode.value,
+          modeName: profile ? profile.name : mode.value,
+          startedAt: sessionStartTime.value,
+          endedAt: new Date().toISOString(),
+          durationSeconds,
+        });
+      }
+    } catch (e) {
+      console.warn("Failed to save session stats:", e);
+    }
 
     mode.value = "idle";
     isLocked.value = false;
-
-    return finalTime;
+    sessionStartTime.value = null;
   }
 
-  return { mode, isLocked, modeLabel, lockIn, stopSession };
+  return { mode, isLocked, lockIn, stopSession };
 });

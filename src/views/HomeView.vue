@@ -3,22 +3,46 @@ import { ref } from "vue";
 import { useSessionStore } from "../stores/sessionStore";
 import { useTimerStore } from "../stores/timerStore";
 import { useSettingsStore } from "../stores/settingsStore";
+import * as AudioService from "../services/AudioService";
 import ModeCard from "../components/ModeCard.vue";
 import DeleteModal from "../components/DeleteModal.vue";
 import TimerDisplay from "../components/TimerDisplay.vue";
+
+const sessionVolume = ref(60);
 
 const session = useSessionStore();
 const timer = useTimerStore();
 const settings = useSettingsStore();
 
 const showDeleteConfirm = ref(null);
+const showStopConfirm = ref(false);
 
 async function handleLockIn(modeId) {
+  const m = settings.modes.find((x) => x.id === modeId);
+  sessionVolume.value = m?.volume ?? 60;
   await session.lockIn(modeId);
 }
 
-async function handleStop() {
+function handleVolumeChange(vol) {
+  sessionVolume.value = vol;
+  AudioService.setVolume(vol);
+}
+
+function requestStop() {
+  showStopConfirm.value = true;
+}
+
+function cancelStop() {
+  showStopConfirm.value = false;
+}
+
+async function confirmStop() {
+  showStopConfirm.value = false;
   await session.stopSession();
+}
+
+function getActiveMode() {
+  return settings.modes.find((x) => x.id === session.mode) || null;
 }
 
 function confirmDelete(modeId) {
@@ -56,7 +80,7 @@ function getModeName(modeId) {
         </div>
         <span class="empty-title">No modes yet</span>
         <span class="empty-desc">Create a focus profile to get started</span>
-        <button class="btn-start" @click="settings.currentTab = 'addProfile'">+ Add Profile</button>
+        <button class="btn-start" @click="settings.editingModeId = null; settings.currentTab = 'addProfile'">+ Add Profile</button>
       </div>
 
       <!-- Mode Cards -->
@@ -65,7 +89,7 @@ function getModeName(modeId) {
         :key="m.id"
         :mode="m"
         @start="handleLockIn(m.id)"
-        @modify="() => {}"
+        @modify="() => { settings.editingModeId = m.id; settings.currentTab = 'editProfile'; }"
         @delete="confirmDelete(m.id)"
       />
     </div>
@@ -75,7 +99,13 @@ function getModeName(modeId) {
       v-if="session.isLocked"
       :time="timer.display"
       :mode-label="getModeName(session.mode)"
-      @stop="handleStop"
+      :sound="getActiveMode()?.sound || 'none'"
+      :volume="sessionVolume"
+      :show-stop-confirm="showStopConfirm"
+      @stop="requestStop"
+      @confirm-stop="confirmStop"
+      @cancel-stop="cancelStop"
+      @volume-change="handleVolumeChange"
     />
 
     <!-- Delete Confirmation Modal -->

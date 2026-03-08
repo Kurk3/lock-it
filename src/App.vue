@@ -1,11 +1,15 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useSettingsStore } from "./stores/settingsStore";
+import { useStatsStore } from "./stores/statsStore";
 import HomeView from "./views/HomeView.vue";
 import SettingsView from "./views/SettingsView.vue";
+import StatsView from "./views/StatsView.vue";
+import ProfileEditorView from "./views/ProfileEditorView.vue";
 import NavBar from "./components/NavBar.vue";
 
 const settings = useSettingsStore();
+const stats = useStatsStore();
 const isDark = ref(true);
 
 function toggleTheme() {
@@ -13,7 +17,10 @@ function toggleTheme() {
   document.documentElement.setAttribute("data-theme", isDark.value ? "dark" : "light");
 }
 
-onMounted(() => settings.load());
+onMounted(async () => {
+  await settings.load();
+  await stats.load();
+});
 </script>
 
 <template>
@@ -23,8 +30,10 @@ onMounted(() => settings.load());
       <div class="app-content">
         <div class="header">
           <div class="logo-area">
-            <svg class="logo-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+            <svg class="logo-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="5" y="11" width="14" height="10" rx="2" />
+              <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+              <circle cx="12" cy="16" r="1.5" fill="currentColor" stroke="none" />
             </svg>
             <span class="logo-text">LOCK IT</span>
           </div>
@@ -48,6 +57,8 @@ onMounted(() => settings.load());
         </div>
         <HomeView v-if="settings.currentTab === 'home'" />
         <SettingsView v-else-if="settings.currentTab === 'settings'" />
+        <StatsView v-else-if="settings.currentTab === 'stats'" />
+        <ProfileEditorView v-else-if="settings.currentTab === 'editProfile' || settings.currentTab === 'addProfile'" />
         <NavBar />
       </div>
     </div>
@@ -62,10 +73,11 @@ onMounted(() => settings.load());
   --bg-tertiary: #282828;
   --bg-hover: #303030;
   --text-primary: #ececec;
-  --text-secondary: #c0c0c0;
-  --text-muted: #909090;
+  --text-secondary: #d0d0d0;
+  --text-muted: #a0a0a0;
   --border: #262626;
   --border-light: #383838;
+  --border-dashed: #383838;
   --accent: #ececec;
   --danger: #e84040;
 }
@@ -79,6 +91,7 @@ onMounted(() => settings.load());
   --text-muted: #999999;
   --border: #e0e0e0;
   --border-light: #cccccc;
+  --border-dashed: #aaaaaa;
   --accent: #1a1a1a;
   --danger: #dc3545;
 }
@@ -88,7 +101,7 @@ body { background: transparent; -webkit-font-smoothing: antialiased; }
 .app-container { display: flex; justify-content: center; padding-top: 8px; }
 
 .app-window {
-  width: 340px;
+  width: 400px;
   background: var(--bg-primary);
   border: 1px solid var(--border);
   border-radius: 14px;
@@ -111,7 +124,7 @@ body { background: transparent; -webkit-font-smoothing: antialiased; }
   padding: 16px;
   display: flex;
   flex-direction: column;
-  min-height: 440px;
+  height: 440px;
 }
 
 .header {
@@ -127,7 +140,7 @@ body { background: transparent; -webkit-font-smoothing: antialiased; }
 .header-actions { display: flex; align-items: center; gap: 2px; }
 .header-btn {
   width: 32px; height: 32px; border-radius: 6px; border: none;
-  background: transparent; color: var(--text-muted);
+  background: transparent; color: var(--text-secondary);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; transition: all 0.15s;
 }

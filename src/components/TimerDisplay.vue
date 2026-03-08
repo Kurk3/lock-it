@@ -1,9 +1,19 @@
 <script setup>
-defineProps({
+const props = defineProps({
   time: { type: String, required: true },
   modeLabel: { type: String, required: true },
+  sound: { type: String, default: "none" },
+  volume: { type: Number, default: 60 },
+  showStopConfirm: { type: Boolean, default: false },
 });
-defineEmits(["stop"]);
+const emit = defineEmits(["stop", "confirm-stop", "cancel-stop", "volume-change"]);
+
+const soundLabels = {
+  none: "No Sound",
+  rain: "Rain",
+  river: "River Stream",
+  forest: "Forest Birds",
+};
 </script>
 
 <template>
@@ -22,15 +32,51 @@ defineEmits(["stop"]);
     <div class="locked-label">LOCKED IN</div>
     <div class="timer-display">{{ time }}</div>
     <div class="mode-indicator">{{ modeLabel }}</div>
-    <button class="stop-btn" @click="$emit('stop')">
-      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2" /></svg>
-      <span>Stop Session</span>
-    </button>
+
+    <!-- Sound bar with volume slider -->
+    <div v-if="sound !== 'none'" class="sound-bar">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+        <path v-if="volume > 0" d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+        <path v-if="volume > 40" d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+      </svg>
+      <span class="sound-label">{{ soundLabels[sound] || sound }}</span>
+      <input
+        type="range"
+        :value="volume"
+        min="0"
+        max="100"
+        class="sound-slider"
+        @input="emit('volume-change', Number($event.target.value))"
+      />
+      <span class="sound-vol">{{ volume }}%</span>
+    </div>
+
+    <div class="stop-area">
+      <button class="stop-btn" @click="$emit('stop')">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2" /></svg>
+        <span>Stop Session</span>
+      </button>
+    </div>
+
+    <!-- Stop confirmation overlay -->
+    <div v-if="showStopConfirm" class="stop-overlay" @click.self="emit('cancel-stop')">
+      <div class="stop-modal">
+        <button class="modal-close" @click="emit('cancel-stop')">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <span class="confirm-text">Stop {{ modeLabel }} session?</span>
+        <div class="confirm-actions">
+          <button class="btn-keep" @click="emit('cancel-stop')">Keep Going</button>
+          <button class="btn-end" @click="emit('confirm-stop')">End Session</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.locked-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 20px 0; }
+.locked-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 20px 0; position: relative; }
 
 .lock-animation { position: relative; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
 .pulse-ring {
@@ -53,8 +99,28 @@ defineEmits(["stop"]);
   font-size: 48px; font-weight: 200; letter-spacing: 2px; color: var(--text-primary);
   font-variant-numeric: tabular-nums; line-height: 1;
 }
-.mode-indicator { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; }
+.mode-indicator { font-size: 12px; color: var(--text-muted); }
 
+/* Sound bar */
+.sound-bar {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: 20px;
+  background: var(--bg-secondary); border: 1px solid var(--border);
+  color: var(--text-muted); margin-top: 4px;
+}
+.sound-label { font-size: 11px; color: var(--text-secondary); white-space: nowrap; }
+.sound-slider {
+  width: 80px; -webkit-appearance: none; appearance: none; height: 3px;
+  background: var(--border); border-radius: 2px; outline: none;
+}
+.sound-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none; width: 12px; height: 12px;
+  border-radius: 50%; background: var(--text-primary); cursor: pointer; border: none;
+}
+.sound-vol { font-size: 10px; color: var(--text-muted); min-width: 28px; text-align: right; }
+
+/* Stop area */
+.stop-area { margin-top: 16px; }
 .stop-btn {
   display: flex; align-items: center; gap: 8px;
   background: transparent; border: 1px solid rgba(255,68,68,0.3);
@@ -63,4 +129,36 @@ defineEmits(["stop"]);
   transition: all 0.2s ease; font-family: inherit;
 }
 .stop-btn:hover { background: rgba(255,68,68,0.1); border-color: rgba(255,68,68,0.5); }
+
+/* Stop confirmation overlay */
+.stop-overlay {
+  position: absolute; inset: 0; z-index: 10;
+  background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+}
+.stop-modal {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 12px;
+  padding: 20px 24px; background: var(--bg-primary); border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.modal-close {
+  position: absolute; top: 8px; right: 8px; background: transparent; border: none;
+  color: var(--text-muted); cursor: pointer; padding: 2px; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center; transition: all 0.15s;
+}
+.modal-close:hover { color: var(--text-primary); background: var(--bg-secondary); }
+.confirm-text { font-size: 12px; color: var(--text-secondary); text-align: center; line-height: 1.4; }
+.confirm-actions { display: flex; gap: 8px; }
+.btn-keep, .btn-end {
+  padding: 7px 16px; font-size: 12px; font-weight: 500; border-radius: 6px;
+  cursor: pointer; font-family: inherit; transition: all 0.15s; white-space: nowrap;
+}
+.btn-keep {
+  background: transparent; border: 1px solid var(--border); color: var(--text-secondary);
+}
+.btn-keep:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+.btn-end {
+  background: var(--danger); border: none; color: #fff; font-weight: 600;
+}
+.btn-end:hover { opacity: 0.9; }
 </style>

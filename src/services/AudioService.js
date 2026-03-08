@@ -13,6 +13,10 @@ export async function play(url) {
   }
 }
 
+export function setVolume(vol) {
+  if (audio) audio.volume = Math.max(0, Math.min(1, vol / 100));
+}
+
 export function stop() {
   if (audio) {
     audio.pause();

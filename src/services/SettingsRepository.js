@@ -1,19 +1,53 @@
-const STORAGE_KEY = "lockit-settings";
+const SETTINGS_FILE = "settings.json";
+const STATS_FILE = "stats.json";
+const LS_SETTINGS_KEY = "lockit-settings";
+const LS_STATS_KEY = "lockit-stats";
 
-export function load() {
+export async function load() {
+  if (window.lockIt?.storeRead) {
+    return await window.lockIt.storeRead(SETTINGS_FILE);
+  }
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(LS_SETTINGS_KEY);
     return raw ? JSON.parse(raw) : null;
   } catch {
     return null;
   }
 }
 
-export function save(data) {
+export async function save(data) {
+  if (window.lockIt?.storeWrite) {
+    await window.lockIt.storeWrite(SETTINGS_FILE, data);
+    return;
+  }
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    localStorage.setItem(LS_SETTINGS_KEY, JSON.stringify(data));
   } catch (e) {
     console.warn("Failed to save settings:", e);
+  }
+}
+
+export async function loadStats() {
+  if (window.lockIt?.storeRead) {
+    return await window.lockIt.storeRead(STATS_FILE);
+  }
+  try {
+    const raw = localStorage.getItem(LS_STATS_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function saveStats(data) {
+  if (window.lockIt?.storeWrite) {
+    await window.lockIt.storeWrite(STATS_FILE, data);
+    return;
+  }
+  try {
+    localStorage.setItem(LS_STATS_KEY, JSON.stringify(data));
+  } catch (e) {
+    console.warn("Failed to save stats:", e);
   }
 }
 
