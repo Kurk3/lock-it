@@ -1,6 +1,7 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("lockIt", {
+  hideWindow: () => ipcRenderer.invoke("hide-window"),
   toggleGrayscale: (enable) => ipcRenderer.invoke("toggle-grayscale", enable),
   openApp: (appPath) => ipcRenderer.invoke("open-app", appPath),
   quitApp: (appName) => ipcRenderer.invoke("quit-app", appName),

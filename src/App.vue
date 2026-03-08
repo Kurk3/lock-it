@@ -17,6 +17,10 @@ function toggleTheme() {
   document.documentElement.setAttribute("data-theme", isDark.value ? "dark" : "light");
 }
 
+function closeWindow() {
+  window.lockIt.hideWindow();
+}
+
 onMounted(async () => {
   await settings.load();
   await stats.load();
@@ -26,7 +30,6 @@ onMounted(async () => {
 <template>
   <div class="app-container">
     <div class="app-window">
-      <div class="arrow"></div>
       <div class="app-content">
         <div class="header">
           <div class="logo-area">
@@ -48,7 +51,7 @@ onMounted(async () => {
               </svg>
             </button>
             <!-- Close -->
-            <button class="header-btn close-btn">
+            <button class="header-btn close-btn" @click="closeWindow">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
               </svg>
@@ -96,40 +99,34 @@ onMounted(async () => {
   --danger: #dc3545;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: transparent; -webkit-font-smoothing: antialiased; }
+html, body { background: var(--bg-primary); -webkit-font-smoothing: antialiased; overflow: hidden; }
 
-.app-container { display: flex; justify-content: center; padding-top: 8px; }
+.app-container {
+  width: 100%;
+  height: 100vh;
+}
 
 .app-window {
-  width: 400px;
+  width: 100%;
+  height: 100%;
   background: var(--bg-primary);
-  border: 1px solid var(--border);
-  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.8);
   position: relative;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
 }
 
-.arrow {
-  position: absolute; top: -6px; right: 24px;
-  width: 12px; height: 12px;
-  background: var(--bg-primary);
-  border-left: 1px solid var(--border);
-  border-top: 1px solid var(--border);
-  transform: rotate(45deg);
-}
+.arrow { display: none; }
 
 .app-content {
-  padding: 16px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  height: 440px;
+  height: 100%;
 }
 
 .header {
   display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 20px; padding-bottom: 12px;
+  margin-bottom: 16px; padding-bottom: 14px;
   border-bottom: 1px solid var(--border);
 }
 
@@ -139,11 +136,11 @@ body { background: transparent; -webkit-font-smoothing: antialiased; }
 
 .header-actions { display: flex; align-items: center; gap: 2px; }
 .header-btn {
-  width: 32px; height: 32px; border-radius: 6px; border: none;
-  background: transparent; color: var(--text-secondary);
+  width: 30px; height: 30px; border-radius: 6px; border: none;
+  background: transparent; color: var(--text-muted);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; transition: all 0.15s;
 }
-.header-btn:hover { color: var(--text-secondary); background: var(--bg-secondary); }
-.header-btn.close-btn:hover { color: var(--danger); background: rgba(232,64,64,0.1); }
+.header-btn:hover { color: var(--text-primary); background: var(--bg-secondary); }
+.header-btn.close-btn:hover { color: var(--danger); background: rgba(232,64,64,0.08); }
 </style>

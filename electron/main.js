@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, ipcMain, nativeImage, screen, dialog } = require("electron");
+const { app, BrowserWindow, Tray, Menu, ipcMain, nativeImage, screen, dialog } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const { exec, spawn } = require("child_process");
@@ -75,16 +75,15 @@ function createTrayIcon() {
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 360,
-    height: 480,
+    width: 420,
+    height: 500,
     show: isDev,
-    frame: isDev,
-    transparent: !isDev,
+    frame: false,
     resizable: isDev,
     skipTaskbar: !isDev,
     alwaysOnTop: !isDev,
+    backgroundColor: "#0e0e0e",
     hasShadow: true,
-    vibrancy: isDev ? undefined : "under-window",
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
@@ -135,6 +134,15 @@ function createTray() {
       mainWindow.focus();
     }
   });
+
+  const contextMenu = Menu.buildFromTemplate([
+    { label: "Show App", click: () => { positionWindow(); mainWindow.show(); mainWindow.focus(); } },
+    { type: "separator" },
+    { label: "Quit", click: () => { isQuitting = true; app.quit(); } },
+  ]);
+  tray.on("right-click", () => {
+    tray.popUpContextMenu(contextMenu);
+  });
 }
 
 function positionWindow() {
@@ -155,6 +163,12 @@ function positionWindow() {
 }
 
 // ===== IPC HANDLERS =====
+
+// Hide the window (for X button in renderer)
+ipcMain.handle("hide-window", async () => {
+  if (mainWindow) mainWindow.hide();
+  return true;
+});
 
 // Quit an app and wait for it to close
 ipcMain.handle("quit-app", async (_event, appName) => {
