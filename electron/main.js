@@ -99,6 +99,13 @@ function createWindow() {
     mainWindow.loadFile(path.join(__dirname, "..", "dist-vue", "index.html"));
   }
 
+  // Block Cmd+R reload in production
+  if (!isDev) {
+    mainWindow.webContents.on("before-input-event", (event, input) => {
+      if (input.key === "r" && input.meta) event.preventDefault();
+    });
+  }
+
   mainWindow.on("blur", () => {
     if (isDev) return;
     if (!mainWindow.webContents.isDevToolsOpened() && !isDialogOpen) {
@@ -149,6 +156,29 @@ function positionWindow() {
 
 // ===== IPC HANDLERS =====
 
+// Quit an app and wait for it to close
+ipcMain.handle("quit-app", async (_event, appName) => {
+  return new Promise((resolve) => {
+    const script = `
+try
+  if application "${appName}" is running then
+    tell application "${appName}" to quit
+    repeat 30 times
+      delay 0.2
+      if application "${appName}" is not running then exit repeat
+    end repeat
+  end if
+end try
+`;
+    const proc = spawn("osascript", ["-"]);
+    proc.stdin.on("error", () => {});
+    proc.stdin.write(script);
+    proc.stdin.end();
+    proc.on("error", () => resolve(true));
+    proc.on("close", () => resolve(true));
+  });
+});
+
 // Toggle macOS grayscale
 ipcMain.handle("toggle-grayscale", async (_event, enable) => {
   return new Promise((resolve) => {
@@ -171,6 +201,25 @@ ipcMain.handle("open-app", async (_event, appPath) => {
       }
     });
   });
+});
+
+// Wait until an app has a visible window (poll up to timeout ms)
+ipcMain.handle("wait-for-app", async (_event, appName, timeout = 5000) => {
+  const start = Date.now();
+  while (Date.now() - start < timeout) {
+    const hasWindow = await new Promise((resolve) => {
+      const proc = spawn("osascript", ["-e",
+        `tell application "System Events" to (count of windows of process "${appName}") > 0`
+      ]);
+      let out = "";
+      proc.stdout.on("data", (d) => (out += d));
+      proc.on("error", () => resolve(false));
+      proc.on("close", () => resolve(out.trim() === "true"));
+    });
+    if (hasWindow) return true;
+    await new Promise((r) => setTimeout(r, 150));
+  }
+  return false;
 });
 
 // Open a folder
@@ -229,8 +278,15 @@ ipcMain.handle("store-read", async (_event, filename) => {
 });
 
 ipcMain.handle("store-write", async (_event, filename, data) => {
-  fs.writeFileSync(getDataPath(filename), JSON.stringify(data, null, 2), "utf-8");
-  return true;
+  try {
+    const dir = app.getPath("userData");
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(path.join(dir, filename), JSON.stringify(data, null, 2), "utf-8");
+    return true;
+  } catch (e) {
+    console.error("store-write failed:", e);
+    return false;
+  }
 });
 
 // ===== WINDOW ARRANGEMENT =====
@@ -260,26 +316,7 @@ ipcMain.handle("arrange-app", async (_event, appName, bounds) => {
   const h = bounds.bottom - bounds.top;
   const script = `
 tell application "${appName}" to activate
-delay 0.3
-
--- Check if window is accessible via System Events (if not, it may be in native fullscreen)
-set windowAccessible to false
-try
-  tell application "System Events"
-    tell process "${appName}"
-      get position of window 1
-    end tell
-  end tell
-  set windowAccessible to true
-end try
-
--- If window not accessible, quit and reopen to exit native fullscreen
-if not windowAccessible then
-  tell application "${appName}" to quit
-  delay 1
-  tell application "${appName}" to activate
-  delay 1
-end if
+delay 0.15
 
 -- Now arrange: try app scripting first, fallback to System Events
 set didArrange to false
@@ -292,7 +329,7 @@ on error
   try
     tell application "${appName}"
       make new window
-      delay 0.3
+      delay 0.2
       set bounds of window 1 to {${bounds.left}, ${bounds.top}, ${bounds.right}, ${bounds.bottom}}
     end tell
     set didArrange to true
@@ -313,36 +350,62 @@ end if
   return runAppleScript(script);
 });
 
+// Arrange two apps side-by-side in one script (faster than two separate calls)
+ipcMain.handle("arrange-split", async (_event, leftApp, leftBounds, rightApp, rightBounds) => {
+  const lw = leftBounds.right - leftBounds.left;
+  const lh = leftBounds.bottom - leftBounds.top;
+  const rw = rightBounds.right - rightBounds.left;
+  const rh = rightBounds.bottom - rightBounds.top;
+  const script = `
+tell application "${leftApp}" to activate
+delay 0.15
+try
+  tell application "${leftApp}"
+    set bounds of window 1 to {${leftBounds.left}, ${leftBounds.top}, ${leftBounds.right}, ${leftBounds.bottom}}
+  end tell
+on error
+  try
+    tell application "System Events"
+      tell process "${leftApp}"
+        set position of window 1 to {${leftBounds.left}, ${leftBounds.top}}
+        set size of window 1 to {${lw}, ${lh}}
+      end tell
+    end tell
+  end try
+end try
+
+tell application "${rightApp}" to activate
+delay 0.15
+try
+  tell application "${rightApp}"
+    set bounds of window 1 to {${rightBounds.left}, ${rightBounds.top}, ${rightBounds.right}, ${rightBounds.bottom}}
+  end tell
+on error
+  try
+    tell application "System Events"
+      tell process "${rightApp}"
+        set position of window 1 to {${rightBounds.left}, ${rightBounds.top}}
+        set size of window 1 to {${rw}, ${rh}}
+      end tell
+    end tell
+  end try
+end try
+`;
+  return runAppleScript(script);
+});
+
 // Native macOS fullscreen (Ctrl+Cmd+F)
 ipcMain.handle("fullscreen-app", async (_event, appName) => {
   const script = `
 tell application "${appName}" to activate
-delay 0.3
-
--- If window not accessible (stuck in fullscreen), quit and reopen
-set windowAccessible to false
-try
-  tell application "System Events"
-    tell process "${appName}"
-      get position of window 1
-    end tell
-  end tell
-  set windowAccessible to true
-end try
-
-if not windowAccessible then
-  tell application "${appName}" to quit
-  delay 1
-  tell application "${appName}" to activate
-  delay 1
-end if
+delay 0.15
 
 -- Ensure app has a window
 try
   tell application "${appName}"
     if (count windows) is 0 then
       make new window
-      delay 0.3
+      delay 0.2
     end if
   end tell
 end try
@@ -363,7 +426,7 @@ ipcMain.handle("create-desktops", async (_event, count) => {
 tell application "System Events"
   key code 126 using {control down}
 end tell
-delay 2.5
+delay 1.5
 
 tell application "System Events"
   tell process "Dock"
@@ -377,7 +440,7 @@ tell application "System Events"
 
     repeat while desktopCount < ${count}
       click button 1 of group "Spaces Bar" of group 1 of group "Mission Control"
-      delay 0.8
+      delay 0.5
       set desktopCount to desktopCount + 1
     end repeat
   end tell
@@ -386,33 +449,55 @@ end tell
 tell application "System Events"
   key code 53
 end tell
-delay 1
+delay 0.5
 `;
   return runAppleScript(script);
 });
 
 // Switch to a specific desktop by index (1-based)
-ipcMain.handle("switch-desktop", async (_event, desktopIndex) => {
-  let script = `
-repeat 20 times
+// Pass fromIndex to do a relative move (faster), otherwise overshoots left first
+ipcMain.handle("switch-desktop", async (_event, desktopIndex, fromIndex) => {
+  let script = "";
+
+  if (fromIndex && fromIndex > 0) {
+    // Relative move — just press left or right the exact number of times
+    const diff = desktopIndex - fromIndex;
+    if (diff === 0) return true;
+    const keyCode = diff > 0 ? 124 : 123; // right : left
+    const count = Math.abs(diff);
+    script = `
+repeat ${count} times
+  tell application "System Events"
+    key code ${keyCode} using {control down}
+  end tell
+  delay 0.25
+end repeat
+delay 0.2
+`;
+  } else {
+    // Absolute — overshoot left then go right
+    script = `
+repeat 12 times
   tell application "System Events"
     key code 123 using {control down}
   end tell
-  delay 0.15
+  delay 0.08
 end repeat
-delay 0.5
+delay 0.2
 `;
-  if (desktopIndex > 1) {
-    script += `
+    if (desktopIndex > 1) {
+      script += `
 repeat ${desktopIndex - 1} times
   tell application "System Events"
     key code 124 using {control down}
   end tell
-  delay 0.5
+  delay 0.25
 end repeat
-delay 0.5
+delay 0.2
 `;
+    }
   }
+
   return runAppleScript(script);
 });
 
