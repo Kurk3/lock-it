@@ -7,6 +7,7 @@ import SettingsView from "./views/SettingsView.vue";
 import StatsView from "./views/StatsView.vue";
 import ProfileEditorView from "./views/ProfileEditorView.vue";
 import NavBar from "./components/NavBar.vue";
+import LogoIcon from "./components/LogoIcon.vue";
 
 const settings = useSettingsStore();
 const stats = useStatsStore();
@@ -33,11 +34,7 @@ onMounted(async () => {
       <div class="app-content">
         <div class="header">
           <div class="logo-area">
-            <svg class="logo-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="5" y="11" width="14" height="10" rx="2" />
-              <path d="M8 11V7a4 4 0 0 1 8 0v4" />
-              <circle cx="12" cy="16" r="1.5" fill="currentColor" stroke="none" />
-            </svg>
+            <LogoIcon class="logo-icon" width="18" height="18" />
             <span class="logo-text">LOCK IT</span>
           </div>
           <div class="header-actions">

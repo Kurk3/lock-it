@@ -17,58 +17,8 @@ process.on("uncaughtException", (err) => {
 });
 
 function createTrayIcon() {
-  // Create a simple 22x22 template icon for macOS menu bar
-  const iconSize = 22;
-  const canvas = Buffer.alloc(iconSize * iconSize * 4, 0);
-
-  // Draw a simple lock shape pixel by pixel (white on transparent)
-  // Shackle (top arc)
-  for (let y = 2; y <= 9; y++) {
-    for (let x = 6; x <= 15; x++) {
-      const isEdge =
-        (x === 6 || x === 7 || x === 14 || x === 15) && y >= 4 ||
-        (y === 2 || y === 3) && x >= 8 && x <= 13;
-      if (isEdge) {
-        const idx = (y * iconSize + x) * 4;
-        canvas[idx] = 255;     // R
-        canvas[idx + 1] = 255; // G
-        canvas[idx + 2] = 255; // B
-        canvas[idx + 3] = 255; // A
-      }
-    }
-  }
-
-  // Body (rectangle)
-  for (let y = 10; y <= 19; y++) {
-    for (let x = 4; x <= 17; x++) {
-      const idx = (y * iconSize + x) * 4;
-      canvas[idx] = 255;
-      canvas[idx + 1] = 255;
-      canvas[idx + 2] = 255;
-      canvas[idx + 3] = 255;
-    }
-  }
-
-  // Keyhole (dark circle + line in body)
-  for (let y = 13; y <= 17; y++) {
-    for (let x = 9; x <= 12; x++) {
-      const isKeyhole =
-        (y <= 15 && ((x - 10.5) ** 2 + (y - 14) ** 2) <= 3) ||
-        (y > 15 && x >= 10 && x <= 11);
-      if (isKeyhole) {
-        const idx = (y * iconSize + x) * 4;
-        canvas[idx] = 0;
-        canvas[idx + 1] = 0;
-        canvas[idx + 2] = 0;
-        canvas[idx + 3] = 255;
-      }
-    }
-  }
-
-  const icon = nativeImage.createFromBuffer(canvas, {
-    width: iconSize,
-    height: iconSize,
-  });
+  const iconPath = path.join(__dirname, "..", "build", "trayTemplate.png");
+  const icon = nativeImage.createFromPath(iconPath);
   icon.setTemplateImage(true);
   return icon;
 }
