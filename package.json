@@ -8,7 +8,7 @@
   "scripts": {
     "dev:vue": "vite",
     "build:vue": "vite build",
-    "dev": "concurrently \"npm run dev:vue\" \"sleep 3 && env -u ELECTRON_RUN_AS_NODE electron .\"",
+    "dev": "concurrently \"npm run dev:vue\" \"sleep 3 && env -u ELECTRON_RUN_AS_NODE LOCK_IT_DEV=1 electron .\"",
     "start": "electron .",
     "build:mac": "npm run build:vue && electron-builder --mac",
     "build:dmg": "npm run build:vue && electron-builder --mac dmg"

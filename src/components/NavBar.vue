@@ -57,7 +57,7 @@ function save() {
 <style scoped>
 .navbar {
   display: flex; align-items: center; justify-content: space-between;
-  margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border);
+  flex-shrink: 0; padding-top: 12px; border-top: 1px solid var(--border);
 }
 
 .nav-btn {

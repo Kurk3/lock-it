@@ -55,10 +55,12 @@ onMounted(async () => {
             </button>
           </div>
         </div>
-        <HomeView v-if="settings.currentTab === 'home'" />
-        <SettingsView v-else-if="settings.currentTab === 'settings'" />
-        <StatsView v-else-if="settings.currentTab === 'stats'" />
-        <ProfileEditorView v-else-if="settings.currentTab === 'editProfile' || settings.currentTab === 'addProfile'" />
+        <div class="main-scroll">
+          <HomeView v-if="settings.currentTab === 'home'" />
+          <SettingsView v-else-if="settings.currentTab === 'settings'" />
+          <StatsView v-else-if="settings.currentTab === 'stats'" />
+          <ProfileEditorView v-else-if="settings.currentTab === 'editProfile' || settings.currentTab === 'addProfile'" />
+        </div>
         <NavBar />
       </div>
     </div>
@@ -140,4 +142,16 @@ html, body { background: var(--bg-primary); -webkit-font-smoothing: antialiased;
 }
 .header-btn:hover { color: var(--text-primary); background: var(--bg-secondary); }
 .header-btn.close-btn:hover { color: var(--danger); background: rgba(232,64,64,0.08); }
+
+.main-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+}
+
+.main-scroll::-webkit-scrollbar { width: 4px; }
+.main-scroll::-webkit-scrollbar-track { background: transparent; }
+.main-scroll::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
+.main-scroll::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 </style>

@@ -1,9 +1,24 @@
 <script setup>
-import { ref, reactive, nextTick, onMounted, onUnmounted } from "vue";
+import { ref, reactive, computed, nextTick, onMounted, onUnmounted } from "vue";
 import { useSettingsStore } from "../stores/settingsStore";
 import * as SettingsRepo from "../services/SettingsRepository";
 
 const settings = useSettingsStore();
+
+// Track which apps are already assigned across all screens
+const usedAppPaths = computed(() => {
+  const paths = new Set();
+  for (const screen of screens) {
+    for (const app of screen.apps) {
+      if (app) paths.add(app.path);
+    }
+  }
+  return paths;
+});
+
+function isAppUsed(app) {
+  return usedAppPaths.value.has(app.path);
+}
 const mode = ref(null);
 
 const name = ref("");
@@ -88,6 +103,7 @@ function startPicking(screenIdx, slotIdx) {
 
 function assignApp(app) {
   if (!pickingSlot.value) return;
+  if (isAppUsed(app)) return;
   const { screenIdx, slotIdx } = pickingSlot.value;
   screens[screenIdx].apps[slotIdx] = { name: app.name, path: app.path, type: app.type };
   pickingSlot.value = null;
@@ -285,6 +301,8 @@ async function browseAppForPicker() {
                 v-for="(app, i) in settings.apps"
                 :key="i"
                 class="app-row"
+                :class="{ 'app-row-disabled': isAppUsed(app) }"
+                :disabled="isAppUsed(app)"
                 @click="assignApp(app)"
               >
                 <div class="app-row-icon">
@@ -292,6 +310,7 @@ async function browseAppForPicker() {
                   <svg v-else viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
                 </div>
                 <span class="app-row-name">{{ app.name }}</span>
+                <span v-if="isAppUsed(app)" class="app-row-used">In use</span>
               </button>
             </div>
             <!-- Inline add app form inside picker -->
@@ -467,9 +486,11 @@ async function browseAppForPicker() {
   background: transparent; border: none; border-radius: 4px;
   cursor: pointer; transition: all 0.15s; font-family: inherit;
 }
-.app-row:hover { background: var(--bg-tertiary); }
+.app-row:hover:not(:disabled) { background: var(--bg-tertiary); }
+.app-row-disabled { opacity: 0.35; cursor: not-allowed !important; }
 .app-row-icon { color: var(--text-muted); display: flex; align-items: center; flex-shrink: 0; }
 .app-row-name { flex: 1; font-size: 11px; color: var(--text-primary); text-align: left; }
+.app-row-used { font-size: 9px; color: var(--text-muted); flex-shrink: 0; }
 
 .empty-hint { font-size: 11px; color: var(--text-muted); padding: 8px; text-align: center; }
 

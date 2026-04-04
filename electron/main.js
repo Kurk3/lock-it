@@ -384,84 +384,45 @@ end tell
 
 // ===== DESKTOP MANAGEMENT =====
 
-// Ensure N desktops exist via Mission Control
-ipcMain.handle("create-desktops", async (_event, count) => {
+// Create one new desktop via Mission Control and switch to it (all in one action)
+ipcMain.handle("create-and-switch-desktop", async () => {
+  // Hide main window so it doesn't block Mission Control (alwaysOnTop in production)
+  if (mainWindow && mainWindow.isVisible()) {
+    mainWindow.hide();
+  }
+
   const script = `
+-- Open Mission Control
 tell application "System Events"
   key code 126 using {control down}
 end tell
 delay 1.5
 
+-- Click "+" to add a new desktop
+tell application "System Events"
+  tell process "Dock"
+    click button 1 of group "Spaces Bar" of group 1 of group "Mission Control"
+  end tell
+end tell
+delay 0.8
+
+-- Click the last (newly created) desktop to switch to it
 tell application "System Events"
   tell process "Dock"
     set allButtons to every button of list 1 of group "Spaces Bar" of group 1 of group "Mission Control"
-    set desktopCount to 0
+    set lastDesktop to missing value
     repeat with b in allButtons
       if name of b starts with "Desktop" then
-        set desktopCount to desktopCount + 1
+        set lastDesktop to b
       end if
     end repeat
-
-    repeat while desktopCount < ${count}
-      click button 1 of group "Spaces Bar" of group 1 of group "Mission Control"
-      delay 0.5
-      set desktopCount to desktopCount + 1
-    end repeat
+    if lastDesktop is not missing value then
+      click lastDesktop
+    end if
   end tell
 end tell
-
-tell application "System Events"
-  key code 53
-end tell
-delay 0.5
+delay 0.8
 `;
-  return runAppleScript(script);
-});
-
-// Switch to a specific desktop by index (1-based)
-// Pass fromIndex to do a relative move (faster), otherwise overshoots left first
-ipcMain.handle("switch-desktop", async (_event, desktopIndex, fromIndex) => {
-  let script = "";
-
-  if (fromIndex && fromIndex > 0) {
-    // Relative move — just press left or right the exact number of times
-    const diff = desktopIndex - fromIndex;
-    if (diff === 0) return true;
-    const keyCode = diff > 0 ? 124 : 123; // right : left
-    const count = Math.abs(diff);
-    script = `
-repeat ${count} times
-  tell application "System Events"
-    key code ${keyCode} using {control down}
-  end tell
-  delay 0.25
-end repeat
-delay 0.2
-`;
-  } else {
-    // Absolute — overshoot left then go right
-    script = `
-repeat 12 times
-  tell application "System Events"
-    key code 123 using {control down}
-  end tell
-  delay 0.08
-end repeat
-delay 0.2
-`;
-    if (desktopIndex > 1) {
-      script += `
-repeat ${desktopIndex - 1} times
-  tell application "System Events"
-    key code 124 using {control down}
-  end tell
-  delay 0.25
-end repeat
-delay 0.2
-`;
-    }
-  }
-
   return runAppleScript(script);
 });
 
@@ -515,6 +476,19 @@ ipcMain.handle("close-other-apps", async () => {
 // ===== APP LIFECYCLE =====
 
 app.dock?.hide(); // Hide dock icon — menu bar app only
+
+// Single instance lock — prevent multiple copies
+const gotTheLock = app.requestSingleInstanceLock();
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on("second-instance", () => {
+    if (mainWindow) {
+      mainWindow.show();
+      mainWindow.focus();
+    }
+  });
+}
 
 app.whenReady().then(() => {
   createWindow();

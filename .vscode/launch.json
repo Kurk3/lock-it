@@ -1,0 +1,35 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Electron Main",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+      "runtimeArgs": ["--remote-debugging-port=9223", "."],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "ELECTRON_RUN_AS_NODE": null,
+        "LOCK_IT_DEV": "1"
+      },
+      "outFiles": [],
+      "sourceMaps": false,
+      "console": "integratedTerminal",
+      "preLaunchTask": "Vite Dev Server"
+    },
+    {
+      "name": "Debug Electron (no Vite)",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+      "runtimeArgs": ["."],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "ELECTRON_RUN_AS_NODE": null
+      },
+      "outFiles": [],
+      "sourceMaps": false,
+      "console": "integratedTerminal"
+    }
+  ]
+}

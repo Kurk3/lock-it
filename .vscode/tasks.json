@@ -1,0 +1,94 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Dev (Vite + Electron)",
+      "dependsOn": ["Vite Dev Server", "Electron Dev"],
+      "dependsOrder": "sequence",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Vite Dev Server",
+      "type": "npm",
+      "script": "dev:vue",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "vite",
+        "severity": "error",
+        "pattern": { "regexp": "^$" },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "VITE",
+          "endsPattern": "Local:.*http"
+        }
+      },
+      "presentation": {
+        "group": "dev",
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Electron Dev",
+      "type": "shell",
+      "command": "sleep 3 && env -u ELECTRON_RUN_AS_NODE LOCK_IT_DEV=1 ./node_modules/.bin/electron .",
+      "isBackground": true,
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": {
+        "owner": "electron",
+        "severity": "info",
+        "pattern": { "regexp": "^$" },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".",
+          "endsPattern": "."
+        }
+      },
+      "presentation": {
+        "group": "dev",
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Build Vue",
+      "type": "npm",
+      "script": "build:vue",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Build DMG",
+      "type": "npm",
+      "script": "build:dmg",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Run Built App",
+      "type": "shell",
+      "command": "open ./dist/mac-universal/Lock\\ It.app",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Build & Run",
+      "dependsOn": ["Build DMG", "Run Built App"],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    }
+  ]
+}

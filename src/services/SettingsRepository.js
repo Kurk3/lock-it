@@ -17,7 +17,7 @@ export async function load() {
 
 export async function save(data) {
   if (window.lockIt?.storeWrite) {
-    await window.lockIt.storeWrite(SETTINGS_FILE, data);
+    await window.lockIt.storeWrite(SETTINGS_FILE, JSON.parse(JSON.stringify(data)));
     return;
   }
   try {
@@ -41,7 +41,7 @@ export async function loadStats() {
 
 export async function saveStats(data) {
   if (window.lockIt?.storeWrite) {
-    await window.lockIt.storeWrite(STATS_FILE, data);
+    await window.lockIt.storeWrite(STATS_FILE, JSON.parse(JSON.stringify(data)));
     return;
   }
   try {

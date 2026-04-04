@@ -17,6 +17,5 @@ contextBridge.exposeInMainWorld("lockIt", {
   arrangeSplit: (leftApp, leftBounds, rightApp, rightBounds) => ipcRenderer.invoke("arrange-split", leftApp, leftBounds, rightApp, rightBounds),
   closeOtherApps: () => ipcRenderer.invoke("close-other-apps"),
   fullscreenApp: (appName) => ipcRenderer.invoke("fullscreen-app", appName),
-  createDesktops: (count) => ipcRenderer.invoke("create-desktops", count),
-  switchDesktop: (desktopIndex, fromIndex) => ipcRenderer.invoke("switch-desktop", desktopIndex, fromIndex),
+  createAndSwitchDesktop: () => ipcRenderer.invoke("create-and-switch-desktop"),
 });
