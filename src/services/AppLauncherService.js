@@ -65,6 +65,15 @@ async function arrangeScreen(screen, workArea) {
 export async function executeDesktopLayout(screens) {
   if (!window.lockIt || !screens || screens.length === 0) return;
 
+  // Check accessibility before doing anything
+  if (window.lockIt.checkAccessibility) {
+    const hasAccess = await window.lockIt.checkAccessibility();
+    if (!hasAccess) {
+      console.warn("Accessibility permission not granted — layout execution skipped.");
+      return;
+    }
+  }
+
   let workArea;
   try {
     workArea = await window.lockIt.getWorkArea();

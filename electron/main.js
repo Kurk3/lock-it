@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, Menu, ipcMain, nativeImage, screen, dialog } = require("electron");
+const { app, BrowserWindow, Tray, Menu, ipcMain, nativeImage, screen, dialog, systemPreferences } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const { exec, spawn } = require("child_process");
@@ -473,6 +473,79 @@ ipcMain.handle("close-other-apps", async () => {
   });
 });
 
+// ===== PERMISSIONS =====
+
+function ensurePermissions() {
+  const isTrusted = systemPreferences.isTrustedAccessibilityClient(false);
+  console.log("[Lock It] Accessibility trusted:", isTrusted);
+
+  if (!isTrusted) {
+    // Show dock so dialogs are visible (menu bar apps have no presence otherwise)
+    app.dock?.show();
+
+    // Step 1: Explain what's needed
+    const response = dialog.showMessageBoxSync(null, {
+      type: "info",
+      title: "Welcome to Lock It!",
+      message: "One quick setup step",
+      detail:
+        "Lock It needs Accessibility permission to manage your windows and desktops.\n\n" +
+        "We'll open System Settings for you — just toggle Lock It ON in the list.",
+      buttons: ["Let's do it", "Later"],
+      defaultId: 0,
+      cancelId: 1,
+    });
+
+    if (response === 0) {
+      // Trigger the native macOS prompt (adds Lock It to the list automatically)
+      systemPreferences.isTrustedAccessibilityClient(true);
+
+      // Open System Settings to the right pane
+      exec(
+        'open "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"'
+      );
+
+      // Step 2: Poll until user grants permission
+      const pollInterval = setInterval(() => {
+        if (systemPreferences.isTrustedAccessibilityClient(false)) {
+          clearInterval(pollInterval);
+
+          // Step 3: Confirm success
+          dialog.showMessageBoxSync(null, {
+            type: "info",
+            title: "You're all set!",
+            message: "Accessibility permission granted.",
+            detail: "Lock It is ready to manage your desktops and windows.",
+            buttons: ["OK"],
+          });
+
+          app.dock?.hide();
+
+          // Trigger Automation permissions now that accessibility works
+          exec(
+            'osascript -e \'tell application "System Events" to get name of first application process\'',
+            () => {}
+          );
+        }
+      }, 1000);
+    } else {
+      app.dock?.hide();
+    }
+
+    return;
+  }
+
+  // Already trusted — just trigger Automation permission if needed
+  exec(
+    'osascript -e \'tell application "System Events" to get name of first application process\'',
+    () => {}
+  );
+}
+
+ipcMain.handle("check-accessibility", async () => {
+  return systemPreferences.isTrustedAccessibilityClient(false);
+});
+
 // ===== APP LIFECYCLE =====
 
 app.dock?.hide(); // Hide dock icon — menu bar app only
@@ -491,8 +564,30 @@ if (!gotTheLock) {
 }
 
 app.whenReady().then(() => {
+  // In production, ensure app is running from /Applications
+  if (!isDev && app.isPackaged) {
+    try {
+      if (!app.isInApplicationsFolder()) {
+        const moved = app.moveToApplicationsFolder({
+          conflictHandler: (conflictType) => {
+            // Overwrite existing version
+            return conflictType === "exists";
+          },
+        });
+        if (moved) return; // App relaunches from /Applications
+      }
+    } catch (e) {
+      console.warn("[Lock It] Could not check/move to Applications:", e.message);
+    }
+  }
+
   createWindow();
   createTray();
+
+  // Delay permissions check so window + tray are fully initialized
+  setTimeout(() => {
+    ensurePermissions();
+  }, 1500);
 });
 
 app.on("before-quit", () => {

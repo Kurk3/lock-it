@@ -10,8 +10,8 @@
     "build:vue": "vite build",
     "dev": "concurrently \"npm run dev:vue\" \"sleep 3 && env -u ELECTRON_RUN_AS_NODE LOCK_IT_DEV=1 electron .\"",
     "start": "electron .",
-    "build:mac": "npm run build:vue && electron-builder --mac",
-    "build:dmg": "npm run build:vue && electron-builder --mac dmg"
+    "build:mac": "npm run build:vue && electron-builder --mac && bash build/codesign.sh",
+    "build:pkg": "npm run build:mac && bash build/build-pkg.sh"
   },
   "dependencies": {
     "pinia": "^2.1.0",
@@ -36,6 +36,7 @@
       "build/**/*"
     ],
     "mac": {
+      "identity": null,
       "category": "public.app-category.productivity",
       "icon": "build/icon.icns",
       "target": [
@@ -48,8 +49,16 @@
       ]
     },
     "dmg": {
-      "title": "Lock It",
-      "backgroundColor": "#0a0a0a"
+      "title": "Install Lock It",
+      "backgroundColor": "#0a0a0a",
+      "contents": [
+        { "x": 130, "y": 220 },
+        { "x": 410, "y": 220, "type": "link", "path": "/Applications" }
+      ],
+      "window": {
+        "width": 540,
+        "height": 400
+      }
     }
   }
 }

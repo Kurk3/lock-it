@@ -18,4 +18,5 @@ contextBridge.exposeInMainWorld("lockIt", {
   closeOtherApps: () => ipcRenderer.invoke("close-other-apps"),
   fullscreenApp: (appName) => ipcRenderer.invoke("fullscreen-app", appName),
   createAndSwitchDesktop: () => ipcRenderer.invoke("create-and-switch-desktop"),
+  checkAccessibility: () => ipcRenderer.invoke("check-accessibility"),
 });
