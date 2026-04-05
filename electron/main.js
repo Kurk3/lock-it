@@ -564,23 +564,6 @@ if (!gotTheLock) {
 }
 
 app.whenReady().then(() => {
-  // In production, ensure app is running from /Applications
-  if (!isDev && app.isPackaged) {
-    try {
-      if (!app.isInApplicationsFolder()) {
-        const moved = app.moveToApplicationsFolder({
-          conflictHandler: (conflictType) => {
-            // Overwrite existing version
-            return conflictType === "exists";
-          },
-        });
-        if (moved) return; // App relaunches from /Applications
-      }
-    } catch (e) {
-      console.warn("[Lock It] Could not check/move to Applications:", e.message);
-    }
-  }
-
   createWindow();
   createTray();
 
