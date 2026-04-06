@@ -10,9 +10,12 @@ OUTPUT="dist/${APP_NAME}-${VERSION}.pkg"
 # Clean
 rm -rf "$PKG_DIR" "$SCRIPTS_DIR" "$OUTPUT"
 
-# Stage using ditto (handles Electron symlinks and extended attrs properly)
+# Stage app — use cp to preserve symlinks, strip resource forks
 mkdir -p "$PKG_DIR"
-ditto "dist/mac-universal/${APP_NAME}.app" "$PKG_DIR/${APP_NAME}.app"
+cp -R "dist/mac-universal/${APP_NAME}.app" "$PKG_DIR/${APP_NAME}.app"
+# Remove ._* resource fork files that can confuse pkgbuild
+find "$PKG_DIR" -name '._*' -delete 2>/dev/null || true
+dot_clean "$PKG_DIR" 2>/dev/null || true
 
 # Post-install script (removes quarantine after install)
 mkdir -p "$SCRIPTS_DIR"
