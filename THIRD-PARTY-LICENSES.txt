@@ -1,0 +1,410 @@
+========================================================================
+Lock It - Third-Party Software Notices and Licenses
+========================================================================
+
+Lock It is built on open-source software. This file lists the
+third-party components incorporated into the Software and their
+respective licenses. You are receiving the rights granted by those
+licenses directly from the original authors.
+
+Copyright (c) 2026 Adam Kurek. The Lock It application itself is
+proprietary - see LICENSE for the terms that apply to it.
+
+========================================================================
+
+### (MIT OR CC0-1.0) License (1 packages)
+
+  - type-fest@0.13.1  sindresorhus/type-fest
+
+### (WTFPL OR MIT) License (1 packages)
+
+  - utf8-byte-length@1.0.5  git+https://github.com/parshap/utf8-byte-length.git
+
+### 0BSD License (1 packages)
+
+  - tslib@2.8.1  https://github.com/Microsoft/tslib.git
+
+### Apache-2.0 License (10 packages)
+
+  - @malept/cross-spawn-promise@1.1.1  https://github.com/malept/cross-spawn-promise
+  - crc-32@1.2.2  git://github.com/SheetJS/js-crc32.git
+  - detect-libc@2.1.2  git://github.com/lovell/detect-libc.git
+  - ejs@3.1.10  git://github.com/mde/ejs.git
+  - filelist@1.0.5  git://github.com/mde/filelist.git
+  - jake@10.9.4  git://github.com/jakejs/jake.git
+  - readdir-glob@1.1.3  git://github.com/Yqnn/node-readdir-glob.git
+  - rxjs@7.8.2  https://github.com/reactivex/rxjs.git
+  - sumchecker@3.0.1  git+https://github.com/malept/sumchecker.git
+  - typescript@5.9.3  https://github.com/microsoft/TypeScript.git
+
+### BSD-2-Clause License (7 packages)
+
+  - @electron/osx-sign@1.0.5  git+https://github.com/electron/osx-sign.git
+  - dotenv@9.0.2  git://github.com/motdotla/dotenv.git
+  - dotenv-expand@5.1.0
+  - entities@7.0.1  https://github.com/fb55/entities.git
+  - extract-zip@2.0.1  maxogden/extract-zip
+  - http-cache-semantics@4.2.0  git+https://github.com/kornelski/http-cache-semantics.git
+  - uri-js@4.4.1  http://github.com/garycourt/uri-js
+
+### BSD-3-Clause License (6 packages)
+
+  - global-agent@3.0.0  https://github.com/gajus/global-agent
+  - ieee754@1.2.1  git://github.com/feross/ieee754.git
+  - roarr@2.15.4  git@github.com:gajus/roarr.git
+  - source-map@0.6.1  http://github.com/mozilla/source-map.git
+  - source-map-js@1.2.1  7rulnik/source-map-js
+  - sprintf-js@1.1.3  https://github.com/alexei/sprintf.js.git
+
+### BlueOak-1.0.0 License (5 packages)
+
+  - jackspeak@3.4.3  git+https://github.com/isaacs/jackspeak.git
+  - minipass@7.1.3  https://github.com/isaacs/minipass
+  - package-json-from-dist@1.0.1  git+https://github.com/isaacs/package-json-from-dist.git
+  - path-scurry@1.11.1  git+https://github.com/isaacs/path-scurry
+  - sax@1.4.4  git://github.com/isaacs/sax-js.git
+
+### ISC License (27 packages)
+
+  - @isaacs/cliui@8.0.2  yargs/cliui
+  - at-least-node@1.0.0  git+https://github.com/RyanZim/at-least-node.git
+  - chownr@2.0.0  git://github.com/isaacs/chownr.git
+  - cliui@8.0.1  yargs/cliui
+  - foreground-child@3.3.1  git+https://github.com/tapjs/foreground-child.git
+  - fs-minipass@2.1.0  git+https://github.com/npm/fs-minipass.git
+  - fs.realpath@1.0.0  git+https://github.com/isaacs/fs.realpath.git
+  - get-caller-file@2.0.5  git+https://github.com/stefanpenner/get-caller-file.git
+  - glob@10.5.0  git://github.com/isaacs/node-glob.git
+  - graceful-fs@4.2.11  https://github.com/isaacs/node-graceful-fs
+  - hosted-git-info@4.1.0  git+https://github.com/npm/hosted-git-info.git
+  - inflight@1.0.6  https://github.com/npm/inflight.git
+  - inherits@2.0.4  git://github.com/isaacs/inherits
+  - isexe@2.0.0  git+https://github.com/isaacs/isexe.git
+  - json-stringify-safe@5.0.1  git://github.com/isaacs/json-stringify-safe
+  - lru-cache@6.0.0  git://github.com/isaacs/node-lru-cache.git
+  - minimatch@9.0.8  git://github.com/isaacs/minimatch.git
+  - once@1.4.0  git://github.com/isaacs/once
+  - picocolors@1.1.1  alexeyraspopov/picocolors
+  - semver@7.7.4  git+https://github.com/npm/node-semver.git
+  - signal-exit@4.1.0  https://github.com/tapjs/signal-exit.git
+  - tar@6.2.1  https://github.com/isaacs/node-tar.git
+  - which@2.0.2  git://github.com/isaacs/node-which.git
+  - wrappy@1.0.2  https://github.com/npm/wrappy
+  - y18n@5.0.8  yargs/y18n
+  - yallist@4.0.0  git+https://github.com/isaacs/yallist.git
+  - yargs-parser@21.1.1  https://github.com/yargs/yargs-parser.git
+
+### MIT License (233 packages)
+
+  - 7zip-bin@5.2.0  develar/7zip-bin
+  - @babel/helper-string-parser@7.27.1  https://github.com/babel/babel.git
+  - @babel/helper-validator-identifier@7.28.5  https://github.com/babel/babel.git
+  - @babel/parser@7.29.0  https://github.com/babel/babel.git
+  - @babel/types@7.29.0  https://github.com/babel/babel.git
+  - @develar/schema-utils@2.6.5  webpack/schema-utils
+  - @electron/asar@3.4.1  git+https://github.com/electron/asar.git
+  - @electron/get@2.0.3  https://github.com/electron/get
+  - @electron/notarize@2.2.1  https://github.com/electron/notarize.git
+  - @electron/universal@1.5.1  https://github.com/electron/universal.git
+  - @esbuild/darwin-arm64@0.21.5  git+https://github.com/evanw/esbuild.git
+  - @jridgewell/sourcemap-codec@1.5.5  git+https://github.com/jridgewell/sourcemaps.git
+  - @malept/flatpak-bundler@0.4.0  git+https://github.com/malept/flatpak-bundler.git
+  - @pkgjs/parseargs@0.11.0  git@github.com:pkgjs/parseargs.git
+  - @rollup/rollup-darwin-arm64@4.59.0  git+https://github.com/rollup/rollup.git
+  - @sindresorhus/is@4.6.0  sindresorhus/is
+  - @szmarczak/http-timer@4.0.6  git+https://github.com/szmarczak/http-timer.git
+  - @tootallnate/once@2.0.0  git://github.com/TooTallNate/once.git
+  - @types/cacheable-request@6.0.3  https://github.com/DefinitelyTyped/DefinitelyTyped.git
+  - @types/debug@4.1.12  https://github.com/DefinitelyTyped/DefinitelyTyped.git
+  - @types/estree@1.0.8  https://github.com/DefinitelyTyped/DefinitelyTyped.git
+  - @types/fs-extra@9.0.13  https://github.com/DefinitelyTyped/DefinitelyTyped.git
+  - @types/http-cache-semantics@4.2.0  https://github.com/DefinitelyTyped/DefinitelyTyped.git
+  - @types/keyv@3.1.4  https://github.com/DefinitelyTyped/DefinitelyTyped.git
+  - @types/ms@2.1.0  https://github.com/DefinitelyTyped/DefinitelyTyped.git
+  - @types/node@20.19.33  https://github.com/DefinitelyTyped/DefinitelyTyped.git
+  - @types/plist@3.0.5  https://github.com/DefinitelyTyped/DefinitelyTyped.git
+  - @types/responselike@1.0.3  https://github.com/DefinitelyTyped/DefinitelyTyped.git
+  - @types/verror@1.10.11  https://github.com/DefinitelyTyped/DefinitelyTyped.git
+  - @types/yauzl@2.10.3  https://github.com/DefinitelyTyped/DefinitelyTyped.git
+  - @vitejs/plugin-vue@5.2.4  git+https://github.com/vitejs/vite-plugin-vue.git
+  - @vue/compiler-core@3.5.29  git+https://github.com/vuejs/core.git
+  - @vue/compiler-dom@3.5.29  git+https://github.com/vuejs/core.git
+  - @vue/compiler-sfc@3.5.29  git+https://github.com/vuejs/core.git
+  - @vue/compiler-ssr@3.5.29  git+https://github.com/vuejs/core.git
+  - @vue/devtools-api@6.6.4  https://github.com/vuejs/vue-devtools.git
+  - @vue/reactivity@3.5.29  git+https://github.com/vuejs/core.git
+  - @vue/runtime-core@3.5.29  git+https://github.com/vuejs/core.git
+  - @vue/runtime-dom@3.5.29  git+https://github.com/vuejs/core.git
+  - @vue/server-renderer@3.5.29  git+https://github.com/vuejs/core.git
+  - @vue/shared@3.5.29  git+https://github.com/vuejs/core.git
+  - @xmldom/xmldom@0.8.11  git://github.com/xmldom/xmldom.git
+  - agent-base@6.0.2  git://github.com/TooTallNate/node-agent-base.git
+  - ajv@6.14.0  https://github.com/ajv-validator/ajv.git
+  - ajv-keywords@3.5.2  git+https://github.com/epoberezkin/ajv-keywords.git
+  - ansi-regex@5.0.1  chalk/ansi-regex
+  - ansi-styles@4.3.0  chalk/ansi-styles
+  - app-builder-bin@4.0.0  develar/app-builder
+  - app-builder-lib@24.13.3  git+https://github.com/electron-userland/electron-builder.git
+  - archiver@5.3.2  https://github.com/archiverjs/node-archiver.git
+  - archiver-utils@2.1.0  https://github.com/archiverjs/archiver-utils.git
+  - assert-plus@1.0.0  https://github.com/mcavage/node-assert-plus.git
+  - astral-regex@2.0.0  kevva/astral-regex
+  - async@3.2.6  https://github.com/caolan/async.git
+  - async-exit-hook@2.0.1  https://github.com/tapppi/async-exit-hook.git
+  - asynckit@0.4.0  git+https://github.com/alexindigo/asynckit.git
+  - balanced-match@1.0.2  git://github.com/juliangruber/balanced-match.git
+  - base64-js@1.5.1  git://github.com/beatgammit/base64-js.git
+  - bl@4.1.0  https://github.com/rvagg/bl.git
+  - bluebird@3.7.2  git://github.com/petkaantonov/bluebird.git
+  - bluebird-lst@1.0.9  develar/fs-extra-p
+  - boolean@3.2.0  git://github.com/thenativeweb/boolean.git
+  - brace-expansion@2.0.2  git://github.com/juliangruber/brace-expansion.git
+  - buffer@5.7.1  git://github.com/feross/buffer.git
+  - buffer-crc32@0.2.13  git://github.com/brianloveswords/buffer-crc32.git
+  - buffer-equal@1.0.1  git://github.com/inspect-js/buffer-equal.git
+  - buffer-from@1.1.2  LinusU/buffer-from
+  - builder-util@24.13.1  git+https://github.com/electron-userland/electron-builder.git
+  - builder-util-runtime@9.2.4  git+https://github.com/electron-userland/electron-builder.git
+  - cacheable-lookup@5.0.4  git+https://github.com/szmarczak/cacheable-lookup.git
+  - cacheable-request@7.0.4  lukechilds/cacheable-request
+  - call-bind-apply-helpers@1.0.2  git+https://github.com/ljharb/call-bind-apply-helpers.git
+  - chalk@4.1.2  chalk/chalk
+  - chromium-pickle-js@0.2.0  https://github.com/electron/node-chromium-pickle-js.git
+  - ci-info@3.9.0  https://github.com/watson/ci-info.git
+  - cli-truncate@2.1.0  sindresorhus/cli-truncate
+  - clone-response@1.0.3  git+https://github.com/sindresorhus/clone-response.git
+  - color-convert@2.0.1  Qix-/color-convert
+  - color-name@1.1.4  git@github.com:colorjs/color-name.git
+  - combined-stream@1.0.8  git://github.com/felixge/node-combined-stream.git
+  - commander@5.1.0  https://github.com/tj/commander.js.git
+  - compare-version@0.1.2  kevva/compare-version
+  - compress-commons@4.1.2  https://github.com/archiverjs/node-compress-commons.git
+  - concat-map@0.0.1  git://github.com/substack/node-concat-map.git
+  - concurrently@9.2.1  https://github.com/open-cli-tools/concurrently.git
+  - config-file-ts@0.2.6  https://github.com/mighdoll/config-file-ts
+  - core-util-is@1.0.2  git://github.com/isaacs/core-util-is
+  - crc@3.8.0  git://github.com/alexgorbatchev/node-crc.git
+  - crc32-stream@4.0.3  https://github.com/archiverjs/node-crc32-stream.git
+  - cross-spawn@7.0.6  git@github.com:moxystudio/node-cross-spawn.git
+  - csstype@3.2.3  https://github.com/frenic/csstype
+  - debug@4.4.3  git://github.com/debug-js/debug.git
+  - decompress-response@6.0.0  sindresorhus/decompress-response
+  - defer-to-connect@2.0.1  git+https://github.com/szmarczak/defer-to-connect.git
+  - define-data-property@1.1.4  git+https://github.com/ljharb/define-data-property.git
+  - define-properties@1.2.1  git://github.com/ljharb/define-properties.git
+  - delayed-stream@1.0.0  git://github.com/felixge/node-delayed-stream.git
+  - detect-node@2.1.0  https://github.com/iliakan/detect-node
+  - dir-compare@3.3.0  https://github.com/gliviu/dir-compare
+  - dmg-builder@24.13.3  git+https://github.com/electron-userland/electron-builder.git
+  - dmg-license@1.0.11  argv-minus-one/dmg-license
+  - dunder-proto@1.0.1  git+https://github.com/es-shims/dunder-proto.git
+  - eastasianwidth@0.2.0  git://github.com/komagata/eastasianwidth.git
+  - electron@32.3.3  https://github.com/electron/electron
+  - electron-builder@24.13.3  git+https://github.com/electron-userland/electron-builder.git
+  - electron-builder-squirrel-windows@24.13.3  git+https://github.com/electron-userland/electron-builder.git
+  - electron-publish@24.13.1  git+https://github.com/electron-userland/electron-builder.git
+  - emoji-regex@8.0.0  https://github.com/mathiasbynens/emoji-regex.git
+  - end-of-stream@1.4.5  git://github.com/mafintosh/end-of-stream.git
+  - env-paths@2.2.1  sindresorhus/env-paths
+  - err-code@2.0.3  git://github.com/IndigoUnited/js-err-code.git
+  - es-define-property@1.0.1  git+https://github.com/ljharb/es-define-property.git
+  - es-errors@1.3.0  git+https://github.com/ljharb/es-errors.git
+  - es-object-atoms@1.1.1  git+https://github.com/ljharb/es-object-atoms.git
+  - es-set-tostringtag@2.1.0  git+https://github.com/es-shims/es-set-tostringtag.git
+  - es6-error@4.1.1  https://github.com/bjyoungblood/es6-error.git
+  - esbuild@0.21.5  git+https://github.com/evanw/esbuild.git
+  - escalade@3.2.0  lukeed/escalade
+  - escape-string-regexp@4.0.0  sindresorhus/escape-string-regexp
+  - estree-walker@2.0.2  https://github.com/Rich-Harris/estree-walker
+  - extsprintf@1.4.1  https://github.com/davepacheco/node-extsprintf.git
+  - fast-deep-equal@3.1.3  git+https://github.com/epoberezkin/fast-deep-equal.git
+  - fast-json-stable-stringify@2.1.0  git://github.com/epoberezkin/fast-json-stable-stringify.git
+  - fd-slicer@1.1.0  git://github.com/andrewrk/node-fd-slicer.git
+  - form-data@4.0.5  git://github.com/form-data/form-data.git
+  - fs-constants@1.0.0  https://github.com/mafintosh/fs-constants.git
+  - fs-extra@10.1.0  https://github.com/jprichardson/node-fs-extra
+  - fsevents@2.3.3  https://github.com/fsevents/fsevents.git
+  - function-bind@1.1.2  https://github.com/Raynos/function-bind.git
+  - get-intrinsic@1.3.0  git+https://github.com/ljharb/get-intrinsic.git
+  - get-proto@1.0.1  git+https://github.com/ljharb/get-proto.git
+  - get-stream@5.2.0  sindresorhus/get-stream
+  - globalthis@1.0.4  git://github.com/ljharb/System.global.git
+  - gopd@1.2.0  git+https://github.com/ljharb/gopd.git
+  - got@11.8.6  sindresorhus/got
+  - has-flag@4.0.0  sindresorhus/has-flag
+  - has-property-descriptors@1.0.2  git+https://github.com/inspect-js/has-property-descriptors.git
+  - has-symbols@1.1.0  git://github.com/inspect-js/has-symbols.git
+  - has-tostringtag@1.0.2  git+https://github.com/inspect-js/has-tostringtag.git
+  - hasown@2.0.2  git+https://github.com/inspect-js/hasOwn.git
+  - http-proxy-agent@5.0.0  git://github.com/TooTallNate/node-http-proxy-agent.git
+  - http2-wrapper@1.0.3  git+https://github.com/szmarczak/http2-wrapper.git
+  - https-proxy-agent@5.0.1  git://github.com/TooTallNate/node-https-proxy-agent.git
+  - iconv-corefoundation@1.1.7  argv-minus-one/iconv-corefoundation
+  - iconv-lite@0.6.3  git://github.com/ashtuchkin/iconv-lite.git
+  - is-ci@3.0.1  https://github.com/watson/is-ci.git
+  - is-fullwidth-code-point@3.0.0  sindresorhus/is-fullwidth-code-point
+  - isarray@1.0.0  git://github.com/juliangruber/isarray.git
+  - isbinaryfile@5.0.7  https://github.com/gjtorikian/isBinaryFile
+  - js-yaml@4.1.1  nodeca/js-yaml
+  - json-buffer@3.0.1  git://github.com/dominictarr/json-buffer.git
+  - json-schema-traverse@0.4.1  git+https://github.com/epoberezkin/json-schema-traverse.git
+  - json5@2.2.3  git+https://github.com/json5/json5.git
+  - jsonfile@6.2.0  git@github.com:jprichardson/node-jsonfile.git
+  - keyv@4.5.4  git+https://github.com/jaredwray/keyv.git
+  - lazy-val@1.0.5  develar/lazy-val
+  - lazystream@1.0.1  https://github.com/jpommerening/node-lazystream.git
+  - lodash@4.17.23  lodash/lodash
+  - lodash.defaults@4.2.0  lodash/lodash
+  - lodash.difference@4.5.0  lodash/lodash
+  - lodash.flatten@4.4.0  lodash/lodash
+  - lodash.isplainobject@4.0.6  lodash/lodash
+  - lodash.union@4.6.0  lodash/lodash
+  - lowercase-keys@2.0.0  sindresorhus/lowercase-keys
+  - magic-string@0.30.21  git+https://github.com/Rich-Harris/magic-string.git
+  - matcher@3.0.0  sindresorhus/matcher
+  - math-intrinsics@1.1.0  git+https://github.com/es-shims/math-intrinsics.git
+  - mime@2.6.0  https://github.com/broofa/mime
+  - mime-db@1.52.0  jshttp/mime-db
+  - mime-types@2.1.35  jshttp/mime-types
+  - mimic-response@3.1.0  sindresorhus/mimic-response
+  - minimist@1.2.8  git://github.com/minimistjs/minimist.git
+  - minizlib@2.1.2  git+https://github.com/isaacs/minizlib.git
+  - mkdirp@1.0.4  https://github.com/isaacs/node-mkdirp.git
+  - ms@2.1.3  vercel/ms
+  - nanoid@3.3.11  ai/nanoid
+  - node-addon-api@1.7.2  git://github.com/nodejs/node-addon-api.git
+  - normalize-path@3.0.0  jonschlinkert/normalize-path
+  - normalize-url@6.1.0  sindresorhus/normalize-url
+  - object-keys@1.1.1  git://github.com/ljharb/object-keys.git
+  - p-cancelable@2.1.1  sindresorhus/p-cancelable
+  - path-is-absolute@1.0.1  sindresorhus/path-is-absolute
+  - path-key@3.1.1  sindresorhus/path-key
+  - pend@1.2.0  git://github.com/andrewrk/node-pend.git
+  - pinia@2.3.1  git+https://github.com/vuejs/pinia.git
+  - plist@3.1.0  git://github.com/TooTallNate/node-plist.git
+  - postcss@8.5.6  postcss/postcss
+  - process-nextick-args@2.0.1  https://github.com/calvinmetcalf/process-nextick-args.git
+  - progress@2.0.3  git://github.com/visionmedia/node-progress
+  - promise-retry@2.0.1  git://github.com/IndigoUnited/node-promise-retry.git
+  - pump@3.0.3  git://github.com/mafintosh/pump.git
+  - punycode@2.3.1  https://github.com/mathiasbynens/punycode.js.git
+  - quick-lru@5.1.1  sindresorhus/quick-lru
+  - read-config-file@6.3.2  develar/read-config-file
+  - readable-stream@2.3.8  git://github.com/nodejs/readable-stream
+  - require-directory@2.1.1  git://github.com/troygoode/node-require-directory.git
+  - resolve-alpn@1.2.1  git+https://github.com/szmarczak/resolve-alpn.git
+  - responselike@2.0.1  https://github.com/sindresorhus/responselike.git
+  - retry@0.12.0  git://github.com/tim-kos/node-retry.git
+  - rollup@4.59.0  git+https://github.com/rollup/rollup.git
+  - safe-buffer@5.1.2  git://github.com/feross/safe-buffer.git
+  - safer-buffer@2.1.2  git+https://github.com/ChALkeR/safer-buffer.git
+  - semver-compare@1.0.0  git://github.com/substack/semver-compare.git
+  - serialize-error@7.0.1  sindresorhus/serialize-error
+  - shebang-command@2.0.0  kevva/shebang-command
+  - shebang-regex@3.0.0  sindresorhus/shebang-regex
+  - shell-quote@1.8.3  http://github.com/ljharb/shell-quote.git
+  - simple-update-notifier@2.0.0  https://github.com/alexbrazier/simple-update-notifier.git
+  - slice-ansi@3.0.0  chalk/slice-ansi
+  - smart-buffer@4.2.0  https://github.com/JoshGlazebrook/smart-buffer.git
+  - source-map-support@0.5.21  https://github.com/evanw/node-source-map-support
+  - stat-mode@1.0.0  git://github.com/TooTallNate/stat-mode.git
+  - string-width@4.2.3  sindresorhus/string-width
+  - string_decoder@1.1.1  git://github.com/nodejs/string_decoder.git
+  - strip-ansi@6.0.1  chalk/strip-ansi
+  - supports-color@7.2.0  chalk/supports-color
+  - tar-stream@2.2.0  git+https://github.com/mafintosh/tar-stream.git
+  - temp-file@3.4.0  develar/temp-file
+  - tmp@0.2.5  https://github.com/raszi/node-tmp.git
+  - tmp-promise@3.0.3  git://github.com/benjamingr/tmp-promise.git
+  - tree-kill@1.2.2  git://github.com/pkrumins/node-tree-kill.git
+  - undici-types@6.21.0  git+https://github.com/nodejs/undici.git
+  - universalify@2.0.1  git+https://github.com/RyanZim/universalify.git
+  - util-deprecate@1.0.2  git://github.com/TooTallNate/util-deprecate.git
+  - verror@1.10.1  https://github.com/joyent/node-verror.git
+  - vite@5.4.21  git+https://github.com/vitejs/vite.git
+  - vue@3.5.29  git+https://github.com/vuejs/core.git
+  - vue-demi@0.14.10  https://github.com/antfu/vue-demi.git
+  - wrap-ansi@7.0.0  chalk/wrap-ansi
+  - xmlbuilder@15.1.1  git://github.com/oozcitak/xmlbuilder-js.git
+  - yargs@17.7.2  https://github.com/yargs/yargs.git
+  - yauzl@2.10.0  https://github.com/thejoshwolfe/yauzl.git
+  - zip-stream@4.1.1  https://github.com/archiverjs/node-zip-stream.git
+
+### MPL-2.0 License (2 packages)
+
+  - lightningcss@1.31.1  https://github.com/parcel-bundler/lightningcss.git
+  - lightningcss-darwin-arm64@1.31.1  https://github.com/parcel-bundler/lightningcss.git
+
+### Python-2.0 License (1 packages)
+
+  - argparse@2.0.1  nodeca/argparse
+
+### UNKNOWN License (5 packages)
+
+  - rxjs/ajax@?
+  - rxjs/fetch@?
+  - rxjs/operators@?
+  - rxjs/testing@?
+  - rxjs/webSocket@?
+
+### WTFPL License (1 packages)
+
+  - truncate-utf8-bytes@1.0.2  git+https://github.com/parshap/truncate-utf8-bytes.git
+
+### WTFPL OR ISC License (1 packages)
+
+  - sanitize-filename@1.6.3  git@github.com:parshap/node-sanitize-filename.git
+
+========================================================================
+Full License Texts
+========================================================================
+
+MIT License
+------------------------------------------------------------------------
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+ISC License
+------------------------------------------------------------------------
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+
+Apache License 2.0, BSD-2-Clause, BSD-3-Clause, MPL-2.0, 0BSD,
+BlueOak-1.0.0, Python-2.0, WTFPL, CC0-1.0
+------------------------------------------------------------------------
+Full texts of these licenses are available at:
+  - Apache-2.0:    https://www.apache.org/licenses/LICENSE-2.0
+  - BSD-2-Clause:  https://opensource.org/licenses/BSD-2-Clause
+  - BSD-3-Clause:  https://opensource.org/licenses/BSD-3-Clause
+  - MPL-2.0:       https://www.mozilla.org/en-US/MPL/2.0/
+  - 0BSD:          https://opensource.org/licenses/0BSD
+  - BlueOak-1.0.0: https://blueoakcouncil.org/license/1.0.0
+  - Python-2.0:    https://docs.python.org/3/license.html
+  - WTFPL:         http://www.wtfpl.net/about/
+  - CC0-1.0:       https://creativecommons.org/publicdomain/zero/1.0/
+
+========================================================================
